@@ -45,7 +45,7 @@
 // 	console.log(number);
 // }
 
-//---------------Arrray.form
+//---------------Arrray.from
 
 let pseudo = {
 	0: "first",
