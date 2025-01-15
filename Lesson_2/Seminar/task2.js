@@ -19,10 +19,14 @@ class PremiumUser extends User {
 	constructor(name, lastname, premiumAccount) {
 		super(name);
 		this.lastname = lastname;
+		this.premiumAccount = premiumAccount;
 	}
 
-	setPremiumAccount() {
-		this.premiumAccount = new Date().setFullYear(new Date().getFullYear() + 1);
+	setPremiumAccount(date) {
+		if (date !== null) {
+			this.premiumAccount += 1;
+		}
+		return this.premiumAccount;
 	}
 
 	get getPremiumAccount() {
@@ -40,13 +44,9 @@ class Cat {}
 
 const getAccountInfo = (user) => {
 	if (user instanceof PremiumUser && user.premiumAccount) {
-		console.log(
-			`Премиум аккаунт действителен до: ${new Date(user?.premiumAccount)?.getFullYear()}`,
-			user.getName,
-			user.getLastname
-		);
+		console.log(`Премиум аккаунт действителен до: ${user.premiumAccount}`, user.getName, user.getLastname);
 	} else {
-		console.log("Информация отсутствует");
+		console.log("Данные не найдены");
 	}
 
 	if (user instanceof RegularUser) {
@@ -58,10 +58,11 @@ const getAccountInfo = (user) => {
 	}
 };
 
-const premUser = new PremiumUser("John", "Doe", 2025);
-//premUser.setPremiumAccount();
+const premUser = new PremiumUser("John", "Doe", 2024);
+premUser.setPremiumAccount(premUser.premiumAccount);
 const regUser = new RegularUser("John", "Smith");
 const user = new User("User", "Luser");
 const user2 = new Cat();
 
+console.log(premUser.premiumAccount);
 getAccountInfo(premUser);
