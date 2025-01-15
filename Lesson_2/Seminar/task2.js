@@ -39,12 +39,14 @@ class RegularUser extends User {
 class Cat {}
 
 const getAccountInfo = (user) => {
-	if (user instanceof PremiumUser) {
+	if (user instanceof PremiumUser && user.premiumAccount) {
 		console.log(
-			`Премиум аккаунт действителен до: ${new Date(user?.premiumAccount).getFullYear()}` ?? "Информация отсутствует",
+			`Премиум аккаунт действителен до: ${new Date(user?.premiumAccount)?.getFullYear()}`,
 			user.getName,
 			user.getLastname
 		);
+	} else {
+		console.log("Информация отсутствует");
 	}
 
 	if (user instanceof RegularUser) {
@@ -56,8 +58,8 @@ const getAccountInfo = (user) => {
 	}
 };
 
-const premUser = new PremiumUser("John", "Doe", null);
-premUser.setPremiumAccount();
+const premUser = new PremiumUser("John", "Doe", 2025);
+//premUser.setPremiumAccount();
 const regUser = new RegularUser("John", "Smith");
 const user = new User("User", "Luser");
 const user2 = new Cat();

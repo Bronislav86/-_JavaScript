@@ -20,19 +20,17 @@ class BankManager {
 	deposit(amount) {
 		if (amount <= 0) {
 			throw new Error("Вносимая сумма должна быть больше 0");
-		} else {
-			this.#balance += amount;
-			return this.#balance;
 		}
+		this.#balance += amount;
+		return this.#balance;
 	}
 
 	withdraw(amount) {
 		if (this.#balance < amount) {
 			throw new Error("На счете недостаточно средств");
-		} else {
-			this.#balance -= amount;
-			return this.#balance;
 		}
+		this.#balance -= amount;
+		return this.#balance;
 	}
 }
 

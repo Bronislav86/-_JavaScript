@@ -1,31 +1,27 @@
-// try {
-//   undefined = 1;
-// }
-// catch {
-//   console.log("Что-то пошло не так...")
-// }
-// finally {
-//   console.log("Отличный результат")
-// }
+try {
+	undefined = 1;
+} catch {
+	console.log("Что-то пошло не так...");
+} finally {
+	console.log("Отличный результат");
+}
 
-// function divideNumbers(a, b) {
-//   try {
-//     const result = a / b;
-//     if (isNaN(result)) {
-//       throw new Error('Результат не является числом')
-//     }
-//     console.log('Результат деления:', result);
-//   }
-//   catch(error) {
-//     console.log("Ошибка деления:", error);
-//   }
-//   finally {
-//     console.log("Операция делени я завершена");
-//   }
-// }
+function divideNumbers(a, b) {
+	try {
+		const result = a / b;
+		if (isNaN(result)) {
+			throw new Error("Результат не является числом");
+		}
+		console.log("Результат деления:", result);
+	} catch (error) {
+		console.log("Ошибка деления:", error);
+	} finally {
+		console.log("Операция делени я завершена");
+	}
+}
 
-// divideNumbers(10, 2);
-// divideNumbers("123", "fbzfvg");
+divideNumbers(10, 2);
+divideNumbers("123", "fbzfvg");
 
 //----------------------------------
 
