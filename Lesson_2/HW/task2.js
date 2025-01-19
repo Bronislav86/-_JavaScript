@@ -70,8 +70,7 @@ commentContainer.addEventListener("click", (event) => {
 		const comment = inputReview.value.trim();
 
 		if (comment.length < 50 || comment.length > 500) {
-			console.log("Длина сообщения не удовлетворяет условиям");
-			return;
+			throw new Error("Длина комментария не может быть менее 50 и более 500 символов");
 		}
 
 		let reviewId = 0;
