@@ -40,91 +40,55 @@ initialData.forEach((object) => {
 
 	const titleEl = document.createElement("p");
 	titleEl.textContent = object.product;
-
 	productEl.appendChild(titleEl);
-	const arrayOfReviews = object.reviews;
 
-	for (let element of arrayOfReviews) {
+	object.reviews.forEach((review) => {
 		const reviewEl = document.createElement("li");
-		if (isNaN(element.text)) {
-			reviewEl.textContent = element.text;
-			productEl.appendChild(reviewEl);
-		}
-	}
-
-	commentContainer.appendChild(productEl);
+		reviewEl.textContent = review.text;
+		productEl.appendChild(reviewEl);
+	});
 
 	const inputReview = document.createElement("input");
 	inputReview.classList.add("comment");
+
 	const submitBtn = document.createElement("button");
 	submitBtn.classList.add("submit-btn");
 	submitBtn.textContent = "Оставить отзыв";
 
 	productEl.appendChild(inputReview);
 	productEl.appendChild(submitBtn);
+
+	commentContainer.appendChild(productEl);
 });
 
-const buttonEls = document.querySelectorAll(".submit-btn");
+commentContainer.addEventListener("click", (event) => {
+	if (event.target.classList.contains("submit-btn")) {
+		const submitBtn = event.target;
+		const inputReview = submitBtn.previousElementSibling;
+		const productEl = submitBtn.closest(".productReviewsList");
+		const titleOfProduct = productEl.querySelector("p").textContent;
+		const comment = inputReview.value.trim();
 
-buttonEls.forEach((button) => {
-	button.addEventListener("click", () => {
-		const comment = button.previousElementSibling.value;
-
-		const parentElement = button.parentNode.childNodes;
-
-		let titleOfProduct = null;
-
-		for (const item of parentElement) {
-			if (item.tagName === "P") {
-				titleOfProduct = item.textContent;
-			}
+		if (comment.length < 5 || comment.length > 50) {
+			console.log("Длина сообщения не удовлетворяет условиям");
+			return;
 		}
 
-		try {
-			if (comment.length < 5 || comment.length > 50) {
-				throw new Error("Длина сообщения не удовлетворяет условиям");
+		let reviewId = 0;
+
+		initialData.forEach((item) => {
+			if (item.product === titleOfProduct) {
+				reviewId = item.reviews.length ? parseInt(item.reviews[item.reviews.length - 1].id) + 1 : 1;
+				const newReview = { id: reviewId.toString(), text: comment };
+				item.reviews.push(newReview);
 			}
-			let reviewId = 0;
+		});
 
-			for (const item of initialData) {
-				if (item.product == titleOfProduct) {
-					const reviewsArrayLength = item.reviews.length - 1;
+		const reviewEl = document.createElement("li");
+		reviewEl.textContent = comment;
 
-					reviewId = parseInt(item.reviews[reviewsArrayLength].id) + 1;
+		productEl.insertBefore(reviewEl, inputReview);
 
-					const newComment = {
-						id: reviewId,
-						text: comment,
-					};
-
-					item.reviews.push(newComment);
-				}
-			}
-
-			const listEls = document.querySelectorAll(".productReviewsList");
-
-			initialData.forEach((object) => {
-				if (object.product == titleOfProduct) {
-					const arrayOfReviews = object.reviews;
-					const reviewEl = document.createElement("li");
-					for (let element of arrayOfReviews) {
-						if (element.id == reviewId) {
-							reviewEl.textContent = element.text;
-						}
-					}
-
-					listEls.forEach((element) => {
-						if (element.firstChild.textContent == titleOfProduct) {
-							element.lastElementChild.previousSibling.previousSibling.appendChild(reviewEl);
-
-							const inputReview = element.lastElementChild.previousSibling;
-							inputReview.value = "";
-						}
-					});
-				}
-			});
-		} catch (error) {
-			console.log(error.message);
-		}
-	});
+		inputReview.value = "";
+	}
 });
