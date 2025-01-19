@@ -71,6 +71,7 @@ buttonEls.forEach((button) => {
 		const comment = button.previousElementSibling.value;
 
 		const parentElement = button.parentNode.childNodes;
+
 		let titleOfProduct = null;
 
 		for (const item of parentElement) {
@@ -126,5 +127,4 @@ buttonEls.forEach((button) => {
 			console.log(error.message);
 		}
 	});
-	console.log(initialData);
 });

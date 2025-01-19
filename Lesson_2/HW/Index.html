@@ -4,18 +4,33 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<style>
-			.comment-container {
-				margin-bottom: 50px;
+			.productReviewsList {
+				list-style: none;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.productReviewsList p {
+				font-size: 30px;
+				margin-top: 0;
+				margin-bottom: 15px;
+			}
+
+			.comment {
+				max-width: 250px;
+			}
+
+			.submit-btn {
+				max-width: 120px;
+				margin-bottom: 15px;
 			}
 		</style>
 		<title>HW2</title>
 	</head>
 	<body>
 		<div class="comment-container" margin-bottom="50px"></div>
-		<div class="comment-box">
-			<!--<input type="text" class="comment" />
- 			<button class="submit-btn">Оставить отзыв</button> -->
-		</div>
+		<div class="comment-box"></div>
 	</body>
 	<script src="task2.js"></script>
 </html>
