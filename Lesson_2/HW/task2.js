@@ -69,7 +69,7 @@ commentContainer.addEventListener("click", (event) => {
 		const titleOfProduct = productEl.querySelector("p").textContent;
 		const comment = inputReview.value.trim();
 
-		if (comment.length < 5 || comment.length > 50) {
+		if (comment.length < 50 || comment.length > 500) {
 			console.log("Длина сообщения не удовлетворяет условиям");
 			return;
 		}
