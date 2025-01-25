@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<a class="href" href="Index1.html">Оставить отзыв</a>
+			<ul class="products-container"></ul>
+		</div>
+	</body>
+	<script>
+		const listEl = document.querySelector(".products-container");
+
+		const data = localStorage.getItem("ProductsAndReviews");
+		let dataFromStorage = data ? JSON.parse(data) : [];
+
+		renderReviewsFunction();
+
+		showProductReviews();
+
+		removeProductReviewFunction();
+
+		removeProductFunction();
+
+		function renderReviewsFunction() {
+			for (product of dataFromStorage) {
+				const productEl = document.createElement("li");
+				productEl.classList.add("productEl");
+
+				const titleOfProduct = document.createElement("h3");
+				titleOfProduct.classList.add("titleOfProduct");
+				titleOfProduct.textContent = product.productName;
+				productEl.appendChild(titleOfProduct);
+
+				for (review of product.productReview) {
+					const reviewsBox = document.createElement("div");
+					reviewsBox.classList.add("reviewsBox");
+
+					const reviewsOfProduct = document.createElement("p");
+					reviewsOfProduct.classList.add("reviews");
+					reviewsOfProduct.id = review.id;
+					reviewsOfProduct.textContent = review.review;
+					reviewsBox.appendChild(reviewsOfProduct);
+
+					const delBtn = document.createElement("button");
+					delBtn.classList.add("delBtn");
+					delBtn.textContent = "Удалить отзыв";
+					reviewsBox.appendChild(delBtn);
+
+					productEl.appendChild(reviewsBox);
+				}
+				listEl.appendChild(productEl);
+
+				const removeProductBtn = document.createElement("button");
+				removeProductBtn.classList.add("removeProduct");
+				removeProductBtn.textContent = "Удалить товар";
+
+				productEl.appendChild(removeProductBtn);
+			}
+		}
+
+		function getSibling(element, tag) {
+			let siblingEl = null;
+			Array.from(element.parentNode.children).forEach((sibling) => {
+				if (sibling !== element && sibling.tagName == tag) {
+					siblingEl = sibling;
+				}
+			});
+			return siblingEl;
+		}
+
+		function showProductReviews() {
+			const liEls = listEl.querySelectorAll(".productEl");
+			liEls.forEach((li) => {
+				li.addEventListener("click", (e) => {
+					e.target.parentElement.style.maxHeight = "none";
+					const liChildEls = e.target.parentElement.childNodes;
+
+					liChildEls.forEach((element) => {
+						if (element.tagName === "DIV") {
+							const elsInBox = element.childNodes;
+							elsInBox.forEach((item) => {
+								if (item.style.display === "block") {
+									item.style.display = "none";
+									e.target.parentElement.style.maxHeight = "50px";
+									if (item.parentElement.nextElementSibling.classList.contains("removeProduct")) {
+										item.parentElement.nextElementSibling.style.display = "none";
+									}
+								} else {
+									item.style.display = "block";
+									if (item.parentElement.nextElementSibling.classList.contains("removeProduct")) {
+										item.parentElement.nextElementSibling.style.display = "block";
+									}
+								}
+							});
+						}
+					});
+				});
+			});
+		}
+
+		function removeProductFunction() {
+			const removeProductBtns = document.querySelectorAll(".removeProduct");
+			removeProductBtns.forEach((button) => {
+				button.addEventListener("click", (e) => {
+					const currentButton = e.target;
+					const productNameToDelete = getSibling(currentButton, "H3").textContent;
+
+					dataFromStorage = dataFromStorage.filter((product) => product.productName !== productNameToDelete);
+
+					saveData();
+					location.reload();
+				});
+			});
+		}
+
+		function removeProductReviewFunction() {
+			const buttonEls = listEl.querySelectorAll(".delBtn");
+			buttonEls.forEach((button) => {
+				button.addEventListener("click", (event) => {
+					const parentElement = event.target.parentElement;
+					const productName = getSibling(parentElement, "H3").textContent;
+					const reviewIdToDelete = event.target.previousElementSibling.id;
+
+					const productToChange = dataFromStorage.find((element) => element.productName === productName);
+
+					const newArrayReviews = productToChange.productReview.filter((review) => review.id != reviewIdToDelete);
+
+					productToChange.productReview = newArrayReviews;
+
+					dataFromStorage.forEach((product) => {
+						if (product.productName === productName) {
+							product = productToChange;
+						}
+					});
+					saveData();
+					const reviewToDelete = event.target.previousElementSibling;
+					const reviewsBox = reviewToDelete.parentElement;
+					reviewsBox.remove(reviewToDelete);
+				});
+			});
+		}
+
+		function saveData() {
+			localStorage.setItem("ProductsAndReviews", JSON.stringify(dataFromStorage));
+		}
+	</script>
+</html>

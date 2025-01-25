@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container">
+			<a class="href" href="Index2.html">Почитать отзывы</a>
+			<div class="products-container">
+				<input class="product" type="text" placeholder="Введите название продукта" />
+				<textarea class="review" type="text" placeholder="Оставьте отзыв о продукте"></textarea>
+				<button class="add">Оставить отзыв</button>
+			</div>
+			<div class="notifications"></div>
+		</div>
+	</body>
+	<script>
+		const addButton = document.querySelector(".add");
+		const data = localStorage.getItem("ProductsAndReviews");
+		const dataFromStorage = data ? JSON.parse(data) : [];
+
+		addButton.addEventListener("click", () => {
+			const dataToStorage = {
+				productName: document.querySelector(".product").value,
+				productReview: [
+					{
+						id: 1,
+						review: document.querySelector(".review").value,
+					},
+				],
+			};
+
+			const existingProduct = dataFromStorage.find((element) => element.productName == dataToStorage.productName);
+
+			if (!existingProduct) {
+				dataFromStorage.push(dataToStorage);
+				saveData();
+				document.querySelector(".notifications").textContent = "Новый продукт и отзыв добавлены";
+			} else {
+				let newId = existingProduct.productReview.length + 1;
+				existingProduct.productReview.push({
+					id: newId,
+					review: document.querySelector(".review").value,
+				});
+				saveData();
+				document.querySelector(".notifications").textContent = "Новый продукт и отзыв добавлены";
+			}
+			document.querySelector(".product").value = "";
+			document.querySelector(".review").value = "";
+		});
+
+		function saveData() {
+			localStorage.setItem("ProductsAndReviews", JSON.stringify(dataFromStorage));
+		}
+	</script>
+</html>
